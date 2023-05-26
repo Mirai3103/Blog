@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  a {
+    @apply cursor-pointer;
+  }
+
+  body{
+    font-family: 'Nunito', sans-serif;
+    @apply text-xl leading-6 font-normal;
+  }
+    .switch {
+      width: 60px;
+      height: 27px;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      transition: background-color 0.25s linear;
+      @apply relative cursor-pointer block mx-auto my-0 overflow-hidden bg-black rounded-full
+    }
+  
+    .switch:after {
+      content: "";
+      width: 21px;
+      height: 21px;
+      border-radius: 40px;
+      top: 3px;
+      left: 3px;
+      transition: background-color 0.25s linear, transform 0.25s linear;
+      @apply absolute  bg-white ;
+    }
+  
+    .switch-input {
+      @apply hidden;
+    }
+  
+    .switch-input:checked+.switch {
+      background-color: #6a5af9;
+    }
+  
+    .switch-input:checked+.switch:after {
+      transform: translateX(34px);
+      @apply bg-white ;
+    }
+    .content  p{
+      @apply text-lg leading-8 font-normal;
+    }
+    .content  h1{
+      @apply text-4xl leading-10 font-bold py-4;
+    }
+    .content  h2{
+      @apply text-3xl leading-10 font-bold py-4;
+    }
+    .content  h3{
+      @apply text-xl leading-8 font-bold py-4;
+    }
+         .content h4 {
+           @apply  text-lg leading-6 font-bold py-4;
+         }
+
+}

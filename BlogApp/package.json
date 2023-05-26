@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "scripts": {
+    "build:css": "npx tailwindcss -i wwwroot/css/tailwind.css -o wwwroot/css/site.css",
+    "watch:css": "npx tailwindcss -i wwwroot/css/tailwind.css -o wwwroot/css/site.css --watch"
+  },
+  "license": "MIT"
+}

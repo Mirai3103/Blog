@@ -1,0 +1,85 @@
+using BlogApp.DAL;
+using BlogApp.Dto;
+using BlogApp.Models;
+using BlogApp.Utils;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
+namespace BlogApp.Services;
+
+public class PostService
+{
+    private readonly BlogContext _context;
+
+    public PostService(BlogContext context)
+    {
+        _context = context;
+    }
+
+    public ICollection<Post> GetPosts(int page = 1, int limit = 16)
+    {
+        var posts = _context.Posts.Include(p => p.Tags).Include(p => p.Author)
+            .OrderByDescending(p => p.CreatedAt)
+            .Select(p => new Post()
+            {
+                Author = new User() { DisplayName = p.Author.DisplayName },
+                Tags = p.Tags,
+                Title = p.Title,
+                Slug = p.Slug,
+                CreatedAt = p.CreatedAt,
+                Id = p.Id,
+                Summary = p.Summary,
+                ThumbnailUrl = p.ThumbnailUrl
+            }).ToList();
+        if (posts.Count < 16)
+        {
+            List<Post> result = new();
+            while (result.Count < 16)
+            {
+                result.AddRange(posts);
+            }
+
+            return result;
+        }
+
+        return posts;
+    }
+
+    public Post? GetPostBySlug(string slug)
+    {
+        var post = _context.Posts
+            .Where(p => p.Slug == slug)
+            .Include(p => p.Tags)
+            .Include(p => p.Author)
+            .Select(p => new Post()
+            {
+                Author = new User() { DisplayName = p.Author.DisplayName, Id = p.Author.Id },
+                Tags = p.Tags,
+                Title = p.Title,
+                Slug = p.Slug,
+                CreatedAt = p.CreatedAt,
+                Id = p.Id,
+                Summary = p.Summary,
+                ThumbnailUrl = p.ThumbnailUrl,
+                Content = p.Content,
+            }).FirstOrDefault();
+        return post;
+    }
+
+    public Post CreatePost(CreatePostDto createPostDto)
+    {
+        var post = new Post()
+        {
+            AuthorId = createPostDto.AuthorId,
+            ThumbnailUrl = createPostDto.ThumbnailUrl,
+            Content = createPostDto.Content,
+            Summary = createPostDto.Summary,
+            Title = createPostDto.Title,
+            Published = true,
+            Slug = Helper.Slugify(createPostDto.Title),
+        };
+        _context.Posts.Add(post);
+        _context.SaveChanges();
+        return post;
+    }
+}
