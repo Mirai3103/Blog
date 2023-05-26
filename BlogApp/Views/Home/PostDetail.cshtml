@@ -6,7 +6,18 @@
 {
     <link rel="stylesheet" href="~/css/dracular-hightlight.css" asp-append-version="true"/>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"/>
-    
+    <meta name="description" content="@Model.Summary" />
+    <meta name="author" content="@Model.Author.DisplayName" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:description" content="@Model.Summary" />
+    <meta property="og:image" content="@Model.ThumbnailUrl" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="BlogApp" />
+    <meta property="article:published_time" content="@Model.CreatedAt" />
+    <meta property="article:modified_time" content="@Model.UpdatedAt" />
+    <meta property="article:author" content="@Model.Author.DisplayName" />
+
+
     <style>
         @@font-face {
         font-family: 'Dank Mono';
