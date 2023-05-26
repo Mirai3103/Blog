@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,700&display=swap");
 
 /*
 ! tailwindcss v3.3.2 | MIT License | https://tailwindcss.com
@@ -1004,8 +1004,8 @@ a{
   cursor: pointer;
 }
 
-body{
-  font-family: 'Nunito', sans-serif;
+body {
+  font-family: "Nunito", sans-serif;
   font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.5rem;
@@ -1026,7 +1026,7 @@ body{
   overflow: hidden;
   border-radius: 9999px;
   --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity))
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .switch:after {
@@ -1042,23 +1042,23 @@ body{
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.switch-input:checked+.switch {
+.switch-input:checked + .switch {
   background-color: #6a5af9;
 }
 
-.switch-input:checked+.switch:after {
+.switch-input:checked + .switch:after {
   transform: translateX(34px);
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.content  p{
+.content p{
   font-size: 1.125rem;
   font-weight: 400;
   line-height: 2rem;
 }
 
-.content  h1{
+.content h1{
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 2.25rem;
@@ -1066,7 +1066,7 @@ body{
   line-height: 2.5rem;
 }
 
-.content  h2{
+.content h2{
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 1.875rem;
@@ -1074,7 +1074,7 @@ body{
   line-height: 2.5rem;
 }
 
-.content  h3{
+.content h3{
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 1.25rem;
@@ -1088,6 +1088,72 @@ body{
   font-size: 1.125rem;
   font-weight: 700;
   line-height: 1.5rem;
+}
+
+.content h5{
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
+@font-face {
+  font-family: "Dank Mono";
+
+  src: url("/fonts/Dank Mono Regular.otf") format("opentype");
+
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Dank Mono";
+
+  src: url("/fonts/Dank Mono Italic.otf") format("opentype");
+
+  font-style: italic;
+}
+
+pre {
+  background-color: #1f2937;
+  font-family: "Dank Mono", monospace;
+  border-radius: 0.5rem;
+  padding-bottom: 1rem;
+  padding-top: 1.25rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+article ul{
+  list-style-position: inside;
+  list-style-type: disc;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+article ol{
+  list-style-position: inside;
+  list-style-type: decimal;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+article li{
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+code {
+  font-family: "Dank Mono", monospace;
+  font-style: italic;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0 0.5rem;
 }
 
 .sr-only{
@@ -2395,11 +2461,6 @@ body{
     padding-right: 1rem;
   }
 
-  .md\:px-12{
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-
   .md\:text-blue-700{
     --tw-text-opacity: 1;
     color: rgb(26 86 219 / var(--tw-text-opacity));
@@ -2476,6 +2537,11 @@ body{
     padding-right: 0px;
   }
 
+  .lg\:px-14{
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+  }
+
   .lg\:px-2{
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -2489,11 +2555,6 @@ body{
   .lg\:py-4{
     padding-top: 1rem;
     padding-bottom: 1rem;
-  }
-
-  .lg\:px-14{
-    padding-left: 3.5rem;
-    padding-right: 3.5rem;
   }
 }
 
@@ -2553,6 +2614,11 @@ body{
     flex-direction: column;
   }
 
+  .\$lg\:px-14{
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+  }
+
   .\$lg\:px-2{
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -2562,19 +2628,9 @@ body{
     padding-left: 1rem;
     padding-right: 1rem;
   }
-
-  .\$lg\:px-14{
-    padding-left: 3.5rem;
-    padding-right: 3.5rem;
-  }
 }
 
 @media (max-width: 767px){
-  .\$md\:px-12{
-    padding-left: 3rem;
-    padding-right: 3rem;
-  }
-
   .\$md\:px-2{
     padding-left: 0.5rem;
     padding-right: 0.5rem;
