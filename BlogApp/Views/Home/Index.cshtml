@@ -35,8 +35,8 @@
 
 <div>
     <h3 class="font-semibold text-2xl line-clamp-2 mt-7">Recent blog posts</h3>
-    <div class="px-10 $lg:px-2 $ssm:px-6 grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-none my-8 $lg:h-auto h-[750px]  $lg:grid-rows-6 $lg:grid-cols-1 grid-rows-3 gap-4">
-        <div class="row-span-2 $ssm:row-span-1">
+    <div class="px-4 $lg:px-2 $ssm:px-6 grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-none my-8 $lg:h-auto h-[750px] $lg:grid-rows-6 $lg:grid-cols-1 grid-rows-3 gap-4">
+        <div class="row-span-2 $lg:col-span-2 $ssm:row-span-1">
             <a
                 asp-action="PostDetail"
                 asp-route-slug="@Model.ElementAt(0).Slug"
@@ -69,7 +69,7 @@
                 </div>
             </a>
         </div>
-        <div class=" ">
+        <div class=" $lg:col-span-2 ">
             <a asp-action="PostDetail" asp-route-slug="@Model.ElementAt(1).Slug"  class="headline w-full hover:scale-[1.015] ease-in duration-200 h-full grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-2 gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
                 <div >
                     <img
@@ -99,7 +99,7 @@
                 </div>
             </a>
         </div>
-        <div class=" ">
+        <div class=" $lg:col-span-2 ">
             <a asp-action="PostDetail"
                asp-route-slug="@Model.ElementAt(2).Slug"  class="headline w-full hover:scale-[1.015] ease-in duration-200 h-full grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-2 gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
                 <div >

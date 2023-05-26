@@ -6,5 +6,8 @@
     "build:css": "npx tailwindcss -i wwwroot/css/tailwind.css -o wwwroot/css/site.css",
     "watch:css": "npx tailwindcss -i wwwroot/css/tailwind.css -o wwwroot/css/site.css --watch"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "flowbite": "^1.6.5"
+  }
 }
