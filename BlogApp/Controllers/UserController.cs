@@ -12,19 +12,20 @@ using BlogApp.Services;
 
 namespace BlogApp.Controllers
 {
+
     public class UserController : Controller
     {
-        
+
         private readonly BlogContext _context;
         private readonly UserService _userService;
-        
+
 
         public UserController(BlogContext context, UserService userService)
         {
             _context = context;
             _userService = userService;
         }
-        
+
         // GET: User
         public async Task<IActionResult> Index()
         {
@@ -51,8 +52,8 @@ namespace BlogApp.Controllers
             return View(user);
         }
 
-        // GET: User/Create
-        public IActionResult Create()
+        // GET: User/Register
+        public IActionResult Register()
         {
             return View();
         }
@@ -63,7 +64,7 @@ namespace BlogApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DisplayName,Email,Password")] RegisterDto user)
-        {   
+        {
             if (_userService.FindByEmail(user.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email already exists");
@@ -73,7 +74,7 @@ namespace BlogApp.Controllers
                 _userService.Register(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-                
+
             }
 
             return View(user);

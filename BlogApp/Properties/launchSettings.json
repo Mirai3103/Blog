@@ -2,7 +2,6 @@
   "profiles": {
     "BlogApp": {
       "commandName": "Project",
-      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -11,14 +10,12 @@
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Docker": {
       "commandName": "Docker",
-      "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "publishAllPorts": true
     }
@@ -30,5 +27,7 @@
       "applicationUrl": "http://localhost:52550",
       "sslPort": 0
     }
+    ,
+    "hotReloadProfile": "aspnetcore"
   }
 }

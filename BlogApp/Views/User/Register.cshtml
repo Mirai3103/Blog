@@ -1,0 +1,43 @@
+@model BlogApp.Dto.RegisterDto
+
+<div class="px-6 py-6 max-w-xl mx-auto lg:px-8">
+    <h3 class="mb-4 text-center text-2xl font-bold text-gray-900 dark:text-white">Đăng ký tài khoản</h3>
+    <form class="space-y-6" action="#">
+        <div>
+            <label asp-for="@Model.Email"
+                class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <input asp-for="@Model.Email" type="email"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="name@company.com" required>
+        </div>
+        <div>
+            <label asp-for="@Model.DisplayName"
+                class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Tên người
+                dùng</label>
+            <input asp-for="@Model.DisplayName" type="text"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="name@company.com" required>
+        </div>
+        <div>
+            <label asp-for="@Model.Password"
+                class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Mật khẩu</label>
+            <input asp-for="@Model.Password" type="password" placeholder="••••••••"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                required>
+        </div>
+        <div>
+            <label class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Nhập lại mật khẩu:
+            </label>
+            <input type="password" placeholder="••••••••"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                required>
+        </div>
+
+        <button type="submit"
+            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-base $sm:text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng
+            ký </button>
+        <div class="text-base $sm:text-sm font-medium text-gray-500 dark:text-gray-300">
+            Đã có tài khoản? <a href="#" class="text-blue-700 hover:underline dark:text-blue-500">đăng nhập</a>
+        </div>
+    </form>
+</div>

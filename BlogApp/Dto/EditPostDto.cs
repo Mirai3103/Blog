@@ -1,0 +1,14 @@
+﻿namespace BlogApp.Dto
+{
+    public class EditPostDto
+    {
+        public int Id { get; set; }
+        public int AuthorId { get; set; }
+
+        public string Title { get; set; } = null!;
+
+        public string Summary { get; set; } = null!;
+        public string Content { get; set; } = null!;
+        public string ThumbnailUrl { get; set; } = null!;
+    }
+}

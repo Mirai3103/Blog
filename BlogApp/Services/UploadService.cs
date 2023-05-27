@@ -10,7 +10,33 @@ public class UploadService
             Directory.CreateDirectory(path);
         }
     }
-
+    public Task RemoveFile(string fileName)
+    {
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        return Task.CompletedTask;
+    }
+    public Task RemoveFiles(ICollection<string> fileNames)
+    {
+        var listTask = fileNames.Select(f =>
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", f);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            return Task.CompletedTask;
+        }).ToArray();
+        return Task.WhenAll(listTask);
+    }
+    public ICollection<string> GetUploadedFileNames()
+    {
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+        return Directory.GetFiles(path).Select(f => f.Replace(path, "").Replace("\\", "")).ToList();
+    }
     public string UploadFile(IFormFile file)
     {
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";

@@ -1,28 +1,29 @@
-﻿@model IEnumerable<BlogApp.Models.Post>
+﻿@model IEnumerable<Post>
 @{
     ViewData["Title"] = "Home Page";
 }
 
 @section Heads
 {
-   
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <style>
+
+<script src="https://unpkg.com/scrollreveal"></script>
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @@media screen and (prefers-reduced-motion: reduce) {
         html {
-        	scroll-behavior: smooth;
+            scroll-behavior: auto;
         }
-        @@media screen and (prefers-reduced-motion: reduce) {
-        	html {
-        		scroll-behavior: auto;
-        	}
-        }
-    </style>
+    }
+</style>
 }
 
 @section Scripts{
-  <script>
+<script>
     ScrollReveal().reveal('.headline', { delay: 50 });
-    </script>
+</script>
 }
 
 @functions
@@ -33,183 +34,69 @@
     }
 }
 
+@{
+    var i = 0;
+}
+
 <div>
-    <h3 class="font-semibold text-2xl line-clamp-2 mt-7">Recent blog posts</h3>
-    <div class="px-4 $lg:px-2 $ssm:px-6 grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-none my-8 $lg:h-auto h-[750px] $lg:grid-rows-6 $lg:grid-cols-1 grid-rows-3 gap-4">
-        <div class="row-span-2 $lg:col-span-2 $ssm:row-span-1">
-            <a
-                asp-action="PostDetail"
-                asp-route-slug="@Model.ElementAt(0).Slug"
-                 class="headline w-full hover:scale-[1.015] ease-in duration-200 h-full grid grid-rows-2 grid-cols-1  gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
-                <div >
-                    <img
+    <div id="default-carousel" class="relative $md:max-w-lg max-w-3xl $xl:max-w-[800px] mx-auto" data-carousel="static">
 
-                        src="@Model.ElementAt(0).ThumbnailUrl"
-                        alt=""
-                        class="w-full h-full object-cover"/>
-                </div>
-                <div class="flex  flex-col gap-3 px-1 h-full">
-                    <span class="mt-4 font-semibold text-purple-500 text-sm">
-                        @DateTimeToString(@Model.ElementAt(0).CreatedAt)
-                    </span>
-                    <span class="font-semibold text-2xl line-clamp-2">@Model.ElementAt(0).Title</span>
-                    <span class="text-[#667085] text-base  line-clamp-3">
-                        @Model.ElementAt(0).Summary
-                    </span>
-                    <div class="mb-2">
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-purple-600 bg-purple-200 font-medium text-sm rounded-full">
-                            Design
-                        </span>
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-blue-600 bg-blue-200 font-medium text-sm rounded-full">
-                            Research
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class=" $lg:col-span-2 ">
-            <a asp-action="PostDetail" asp-route-slug="@Model.ElementAt(1).Slug"  class="headline w-full hover:scale-[1.015] ease-in duration-200 h-full grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-2 gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
-                <div >
-                    <img
-                        src="@Model.ElementAt(1).ThumbnailUrl"
-                        alt=""
-                        class="w-full h-full object-cover"/>
-                </div>
-                <div class="flex pl-4 flex-col gap-3 px-1 h-full">
-                    <span class="mt-4 font-semibold text-purple-500 text-sm">
+        <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+            @for (; i < 6; i++)
+            {
+                @await Component.InvokeAsync("CarouserItem", Model.ElementAt(i))
 
-                        @DateTimeToString(@Model.ElementAt(1).CreatedAt)
-                    </span>
-                    <span class="font-semibold text-2xl line-clamp-2">@Model.ElementAt(1).Title</span>
-                    <span class="text-[#667085] text-base line-clamp-2">
-                        @Model.ElementAt(1).Summary
-                    </span>
-                    <div class="mb-2">
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-purple-600 bg-purple-200 font-medium text-sm rounded-full">
-                            Design
-                        </span>
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-blue-600 bg-blue-200 font-medium text-sm rounded-full">
-                            Research
-                        </span>
-                    </div>
-                </div>
-            </a>
+            }
         </div>
-        <div class=" $lg:col-span-2 ">
-            <a asp-action="PostDetail"
-               asp-route-slug="@Model.ElementAt(2).Slug"  class="headline w-full hover:scale-[1.015] ease-in duration-200 h-full grid grid-cols-2 $ssm:grid-cols-1 $ssm:grid-rows-2 gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
-                <div >
-                    <img
-                        src="@Model.ElementAt(2).ThumbnailUrl"
-                        alt=""
-                        class="w-full h-full object-cover"/>
-                </div>
-                <div class="flex pl-4  flex-col gap-3 px-1 h-full">
-                    <span class="mt-4 font-semibold text-purple-500 text-sm">
 
-                        @DateTimeToString(@Model.ElementAt(2).CreatedAt)
-                    </span>
-                    <span class="font-semibold text-2xl line-clamp-2">@Model.ElementAt(2).Title</span>
-                    <span class="text-[#667085] text-base line-clamp-2">
-                        @Model.ElementAt(2).Summary
-                    </span>
-                    <div class="mb-2">
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-purple-600 bg-purple-200 font-medium text-sm rounded-full">
-                            Design
-                        </span>
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-blue-600 bg-blue-200 font-medium text-sm rounded-full">
-                            Research
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="$lg:col-span-1 $lg:row-span-2 col-span-2">
-            <a asp-action="PostDetail"
-               asp-route-slug="@Model.ElementAt(3).Slug" class="headline w-full hover:scale-[1.015] ease-in duration-200 h-full $lg:flex-col flex gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
-                <div class="basis-1/2">
-                    <img
-                        src="@Model.ElementAt(3).ThumbnailUrl"
-                        alt=""
-                        class="w-full h-full object-cover"/>
-                </div>
-                <div class="flex basis-1/2 pl-4 flex-col gap-3 px-1 h-full">
-                    <span class="mt-4 font-semibold text-purple-500 text-sm">
-
-                        @DateTimeToString(@Model.ElementAt(3).CreatedAt)
-                    </span>
-                    <span class="font-semibold text-lg">@Model.ElementAt(3).Title</span>
-                    <span class="text-[#667085] text-base line-clamp-2">
-                        @Model.ElementAt(3).Summary
-                    </span>
-                    <div class="mb-2">
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-purple-600 bg-purple-200 font-medium text-sm rounded-full">
-                            Design
-                        </span>
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-blue-600 bg-blue-200 font-medium text-sm rounded-full">
-                            Research
-                        </span>
-                    </div>
-                </div>
-            </a>
-        </div>
+        <button type="button"
+            class="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+            data-carousel-prev>
+            <span
+                class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg aria-hidden="true" class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                    </path>
+                </svg>
+                <span class="sr-only">Previous</span>
+            </span>
+        </button>
+        <button type="button"
+            class="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+            data-carousel-next>
+            <span
+                class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg aria-hidden="true" class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                    </path>
+                </svg>
+                <span class="sr-only">Next</span>
+            </span>
+        </button>
     </div>
 
     <h3 class="font-semibold text-2xl line-clamp-2 mt-12 mb-5">All blog posts</h3>
     <div class="grid grid-cols-3 gap-8 px-10 $lg:px-4 $ssm:px-6 $lg:grid-cols-2 $ssm:grid-cols-1">
-        @{ var count = Model.Count(); }
-        @for (var i = 4; i < @count; i++)
+        @{
+            var count = Model.Count();
+        }
+        @for (; i < count; i++)
         {
-            var posts = Model.ElementAt(i);
-
-
-            <a asp-action="PostDetail"
-               asp-route-slug="@Model.ElementAt(i).Slug"  class="w-full headline hover:scale-[1.015] ease-in duration-200 grid grid-cols-1 grid-rows-2 gap-0 shadow-lg $ssm:shadow-lg cursor-pointer">
-                <div>
-                    <img
-                        src="@posts.ThumbnailUrl"
-                        alt=""
-                        class="w-full h-full object-cover"/>
-                </div>
-                <div class="flex  pl-4 flex-col gap-3 px-1 h-full">
-                    <span class="mt-4 font-semibold text-purple-500 text-sm">
-                        @DateTimeToString(@posts.CreatedAt)
-                    </span>
-                    <span class="font-semibold text-lg">
-                        @posts.Title
-                    </span>
-                    <span class="text-[#667085] text-base line-clamp-2">
-                        @posts.Summary
-                    </span>
-                    <div class="mb-2">
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-purple-600 bg-purple-200 font-medium text-sm rounded-full">
-                            Design
-                        </span>
-                        <span
-                            class="px-3 py-[0.125rem] m-2 hover:underline cursor-pointer text-blue-600 bg-blue-200 font-medium text-sm rounded-full">
-                            Research
-                        </span>
-                    </div>
-                </div>
-            </a>
+            var post = Model.ElementAt(i);
+            @await Component.InvokeAsync("PostCard", post)
         }
     </div>
     <div class="border-t border-b justify-center py-8 px-2 flex gap-4 font-medium text-sm my-8 mt-4">
         <div class=" bg-gray-100 hover:bg-gray-300 rounded-md px-2 py-1 flex  items-center justify-around gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M5 12l14 0"/>
-                <path d="M5 12l6 6"/>
-                <path d="M5 12l6 -6"/>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20"
+                height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 12l14 0" />
+                <path d="M5 12l6 6" />
+                <path d="M5 12l6 -6" />
             </svg>
             <span>
                 Previous
@@ -217,7 +104,8 @@
         </div>
         <div class="flex gap-2 ">
             <span class=" w-10 h-10 flex justify-center text-purple-700 bg-purple-200 items-center  rounded-md">1</span>
-            <span class=" w-10  hover:bg-purple-100 h-10 flex justify-center items-center bg-gray-50 rounded-md">2</span>
+            <span
+                class=" w-10  hover:bg-purple-100 h-10 flex justify-center items-center bg-gray-50 rounded-md">2</span>
             <span class=" w-10 hover:bg-purple-10 h-10 flex justify-center items-center bg-gray-50 rounded-md">3</span>
         </div>
         <div class=" bg-gray-100 hover:bg-gray-300 rounded-md px-2 py-1 flex  items-center justify-around gap-2">
@@ -225,11 +113,13 @@
             <span>
                 Next
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M5 12l14 0"/>
-                <path d="M13 18l6 -6"/>
-                <path d="M13 6l6 6"/>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="20"
+                height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M5 12l14 0" />
+                <path d="M13 18l6 -6" />
+                <path d="M13 6l6 6" />
             </svg>
         </div>
     </div>

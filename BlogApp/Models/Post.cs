@@ -19,10 +19,13 @@ public class Post
     public int Id { get; set; }
     public int AuthorId { get; set; }
     [Column(TypeName = "nvarchar(255)")]
+    [MaxLength(255)]
     public string Title { get; set; } = null!;
     [Column(TypeName = "varchar(255)")]
+
     public string Slug { get; set; } = null!;
     [Column(TypeName = "nvarchar(500)")]
+    [MaxLength(500)]
     public string Summary { get; set; } = null!;
     public bool Published { get; set; }
     [Column(TypeName = "timestamp")]

@@ -9,7 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-
+site.css
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 .vscode
@@ -404,3 +404,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+mysql

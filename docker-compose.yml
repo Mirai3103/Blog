@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+  web:    
+    container_name: web
+    build: 
+      context: .
+      dockerfile: ./BlogApp/Dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - "8000:80"
+    volumes:
+      - ./BlogApp/wwwroot/uploads:/app/wwwroot/uploads
+    networks:
+      - blogapp-network
+    environment:
+      - DefaultConnection=Server=mysql;Port=3306;Database=blogapp;User=root;Password=Kaito@1412;Charset=utf8mb4;
+  mysql:
+    image: 'mysql:8.0.33'
+    container_name: mysql
+    hostname: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=Kaito@1412
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - blogapp-network
+networks:
+  blogapp-network:
+    driver: bridge

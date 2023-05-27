@@ -2,13 +2,16 @@ using BlogApp.DAL;
 using BlogApp.Services;
 using Microsoft.EntityFrameworkCore;
 
+
+using Quartz;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 var connectionString = Environment.GetEnvironmentVariable("DefaultConnection");
 if (connectionString is null or "")
- connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<BlogContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddTransient<PostService>();
@@ -16,6 +19,23 @@ builder.Services.AddTransient<UploadService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<CommentService>();
 builder.Services.AddTransient<TagService>();
+builder.Services.AddTransient<ScheduleService>();
+/*builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionScopedJobFactory();
+    var jobKey = new JobKey("ClearUnuseImage");
+    q.AddJob<ScheduleService>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("DemoJob-trigger")
+        .WithCalendarIntervalSchedule(s =>
+                   s.WithIntervalInWeeks(1)
+                    .SkipDayIfHourDoesNotExist(true)
+                                                        )
+        );
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = false);*/
 
 
 var app = builder.Build();

@@ -10,7 +10,9 @@ COPY ["BlogApp/BlogApp.csproj", "BlogApp/"]
 RUN dotnet restore "BlogApp/BlogApp.csproj"
 COPY . .
 WORKDIR "/src/BlogApp"
+
 RUN dotnet build "BlogApp.csproj" -c Release -o /app/build
+
 
 FROM build AS publish
 RUN dotnet publish "BlogApp.csproj" -c Release -o /app/publish /p:UseAppHost=false

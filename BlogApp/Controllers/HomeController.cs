@@ -1,11 +1,10 @@
-﻿using BlogApp.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using BlogApp.DAL;
-using BlogApp.Services;
-using System.Linq;
+﻿using BlogApp.DAL;
 using BlogApp.Dto;
+using BlogApp.Models;
+using BlogApp.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Diagnostics;
 
 namespace BlogApp.Controllers
 {
@@ -16,7 +15,7 @@ namespace BlogApp.Controllers
         private readonly BlogContext _context;
         private readonly UploadService _uploadService;
 
-        public HomeController(ILogger<HomeController> logger, PostService postService , BlogContext context, UploadService uploadService)
+        public HomeController(ILogger<HomeController> logger, PostService postService, BlogContext context, UploadService uploadService)
         {
             _logger = logger;
             _postService = postService;
@@ -26,8 +25,8 @@ namespace BlogApp.Controllers
 
         public IActionResult Index()
         {
-            var posts  = _postService.GetPosts();
-                
+            var posts = _postService.GetPosts();
+
             return View(posts);
         }
 
@@ -54,15 +53,61 @@ namespace BlogApp.Controllers
         [HttpGet("post/create")]
         public IActionResult CreatePost()
         {
-            
-                ViewBag.AuthorId = new SelectList(_context.Users.Select(p=>new {p.Id,p.DisplayName}).ToList(), "Id", "DisplayName");
-           
+
+            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
+
 
             return View();
         }
+        [HttpGet("post/edit/{slug}")]
+        public IActionResult EditPost(string slug)
+        {
+
+            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
+            var post = _postService.GetPostBySlug(slug);
+            if (post is null)
+            {
+                return NotFound();
+            }
+
+            return View(new EditPostDto()
+            {
+                AuthorId = post.Author.Id,
+                Content = post.Content,
+                Id = post.Id,
+                Summary = post.Summary,
+                ThumbnailUrl = post.ThumbnailUrl,
+                Title = post.Title
+
+            });
+        }
+        [HttpPost("post/edit/{slug}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditPost(EditPostDto post, [FromForm(Name = "thumbnail")] IFormFile thumbnail, [FromRoute] string slug)
+        {
+            if (thumbnail is not null)
+            {
+                var fileName = _uploadService.UploadFile(thumbnail);
+                post.ThumbnailUrl = fileName;
+            }
+            else
+            {
+                post.ThumbnailUrl = "";
+            }
+
+            ModelState.Remove("ThumbnailUrl");
+            ModelState.Remove("thumbnail");
+            if (ModelState.IsValid)
+            {
+                _postService.EditPost(post);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
+            return View(post);
+        }
         [HttpPost("post/create")]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePost( CreatePostDto post,[FromForm(Name ="thumbnail")] IFormFile thumbnail)
+        public IActionResult CreatePost(CreatePostDto post, [FromForm(Name = "thumbnail")] IFormFile thumbnail)
         {
             var fileName = _uploadService.UploadFile(thumbnail);
             post.ThumbnailUrl = fileName;
@@ -72,7 +117,7 @@ namespace BlogApp.Controllers
                 _postService.CreatePost(post);
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.AuthorId = new SelectList(_context.Users.Select(p=>new {p.Id,p.DisplayName}).ToList(), "Id", "DisplayName");
+            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
             return View(post);
         }
     }

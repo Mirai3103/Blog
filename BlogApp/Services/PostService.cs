@@ -2,7 +2,6 @@ using BlogApp.DAL;
 using BlogApp.Dto;
 using BlogApp.Models;
 using BlogApp.Utils;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp.Services;
@@ -15,7 +14,10 @@ public class PostService
     {
         _context = context;
     }
-
+    public Post? FindByThumbnailUrl(string thumbnailUrl)
+    {
+        return _context.Posts.FirstOrDefault(p => p.ThumbnailUrl.Contains(thumbnailUrl));
+    }
     public ICollection<Post> GetPosts(int page = 1, int limit = 16)
     {
         var posts = _context.Posts.Include(p => p.Tags).Include(p => p.Author)
@@ -79,6 +81,27 @@ public class PostService
             Slug = Helper.Slugify(createPostDto.Title),
         };
         _context.Posts.Add(post);
+        _context.SaveChanges();
+
+        return post;
+    }
+    public Post EditPost(EditPostDto editPostDto)
+    {
+        var post = _context.Posts.FirstOrDefault(p => p.Id == editPostDto.Id);
+        if (post is null)
+        {
+            throw new Exception("Post not found");
+        }
+        post.Content = editPostDto.Content;
+        post.Summary = editPostDto.Summary;
+        if (post.Title != editPostDto.Title)
+        {
+            post.Slug = Helper.Slugify(editPostDto.Title);
+        }
+        post.Title = editPostDto.Title;
+        post.AuthorId = editPostDto.AuthorId;
+        post.UpdatedAt = DateTime.Now;
+        post.ThumbnailUrl = editPostDto.ThumbnailUrl == "" ? post.ThumbnailUrl : editPostDto.ThumbnailUrl;
         _context.SaveChanges();
         return post;
     }

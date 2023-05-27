@@ -43,6 +43,7 @@
         transform: translateX(34px);
         @apply bg-white;
     }
+
     .content p {
         @apply text-lg leading-8 font-normal;
     }
