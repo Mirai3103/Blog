@@ -1,0 +1,2 @@
+docker build -f "D:\Work spaces\dotNet\BlogApp\BlogApp\Dockerfile" --force-rm -t laffy1309/blogapp:dev  --label "com.microsoft.created-by=visual-studio" --label "com.microsoft.visual-studio.project-name=BlogApp" "D:\Work spaces\dotNet\BlogApp"
+@REM docker run -i -d -p 80:80/tcp laffy1309/blogapp:dev

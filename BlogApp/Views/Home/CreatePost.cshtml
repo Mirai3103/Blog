@@ -64,7 +64,9 @@
         var html = quill.root.innerHTML.replaceAll('\n', '<br>');
         contentInput.value = html;
     });
-
+    document.addEventListener("DOMContentLoaded", (event) => {
+        document.querySelectorAll("pre code").forEach((block) => { hljs.highlightBlock(block); });
+    });
 
 </script>
 }

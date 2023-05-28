@@ -1,0 +1,7 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "./BlogApp/Dockerfile"
+
+[deploy]
+startCommand = "dotnet BlogApp.dll"
+restartPolicyType = "never"
