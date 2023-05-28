@@ -2,9 +2,10 @@ version: "3.3"
 services:
   web:    
     container_name: web
-    build: 
-      context: .
-      dockerfile: ./BlogApp/Dockerfile
+    # build: 
+    #   context: .
+    #   dockerfile: ./BlogApp/Dockerfile
+    image: 'laffy1309/blogapp:dev'
     depends_on:
       - mysql
     ports:
