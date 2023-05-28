@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BlogApp.DAL;
 using BlogApp.Dto;
-using BlogApp.Models;
 using BlogApp.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BlogApp.Controllers
 {
@@ -26,7 +24,6 @@ namespace BlogApp.Controllers
             _userService = userService;
         }
 
-        // GET: User
         public async Task<IActionResult> Index()
         {
             return _context.Users != null
@@ -34,7 +31,6 @@ namespace BlogApp.Controllers
                 : Problem("Entity set 'BlogContext.Users'  is null.");
         }
 
-        // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Users == null)
@@ -55,15 +51,64 @@ namespace BlogApp.Controllers
         // GET: User/Register
         public IActionResult Register()
         {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User;
+            if (claimsPrincipal.Identity.IsAuthenticated)
+            {
+                TempData["Info"] = "Bạn đã đăng nhập rồi";
+                return RedirectToAction("Index", "Home");
+
+            }
             return View();
         }
+        public IActionResult Login()
+        {
+            ClaimsPrincipal claimsPrincipal = HttpContext.User;
+            if (claimsPrincipal.Identity.IsAuthenticated)
+            {
+                TempData["Info"] = "Bạn đã đăng nhập rồi";
+                return RedirectToAction("Index", "Home");
 
-        // POST: User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+            }
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login([Bind("Email,Password,RememberMe")] LoginDto user)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var loggedUser = _userService.Login(user);
+                if (loggedUser != null)
+                {
+                    List<Claim> claims = new List<Claim>(){
+                        new Claim(ClaimTypes.NameIdentifier, loggedUser.Id.ToString()),
+                        new Claim(ClaimTypes.Name, loggedUser.DisplayName),
+                        new Claim(ClaimTypes.Email, loggedUser.Email),
+                        new Claim(ClaimTypes.Role, loggedUser.UserRole.ToString() )
+                    };
+                    ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    AuthenticationProperties authProperties = new AuthenticationProperties
+                    {
+                        AllowRefresh = true,
+                        IsPersistent = user.RememberMe
+                    };
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                    TempData["Success"] = "Đăng nhập thành công";
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    TempData["Error"] = "Tài khoản hoặc mật khẩu không đúng";
+                }
+            }
+
+            return View(user);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DisplayName,Email,Password")] RegisterDto user)
+        public IActionResult Register([Bind("DisplayName,Email,Password")] RegisterDto user)
         {
             if (_userService.FindByEmail(user.Email) != null)
             {
@@ -72,9 +117,7 @@ namespace BlogApp.Controllers
             if (ModelState.IsValid)
             {
                 _userService.Register(user);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
             }
 
             return View(user);
@@ -176,6 +219,12 @@ namespace BlogApp.Controllers
         private bool UserExists(int id)
         {
             return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+        [Authorize]
+        public async Task<ActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

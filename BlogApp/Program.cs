@@ -1,5 +1,6 @@
 using BlogApp.DAL;
 using BlogApp.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -20,6 +21,12 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<CommentService>();
 builder.Services.AddTransient<TagService>();
 builder.Services.AddTransient<ScheduleService>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    });
 /*builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionScopedJobFactory();
@@ -49,7 +56,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

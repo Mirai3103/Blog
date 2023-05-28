@@ -1,36 +1,74 @@
 @model BlogApp.Dto.RegisterDto
 
+
+@{
+    var emailErrorClass = ViewData.ModelState["Email"]?.Errors?.FirstOrDefault()?.ErrorMessage is null ? "" :
+            "border-red-500";
+    var passwordErrorClass = ViewData.ModelState["Password"]?.Errors?.FirstOrDefault()?.ErrorMessage is null ?
+    "" :
+    "border-red-500";
+    var displayNameErrorClass = ViewData.ModelState["DisplayName"]?.Errors?.FirstOrDefault()?.ErrorMessage is
+    null ?
+    "" : "border-red-500";
+
+}
 <div class="px-6 py-6 max-w-xl mx-auto lg:px-8">
     <h3 class="mb-4 text-center text-2xl font-bold text-gray-900 dark:text-white">Đăng ký tài khoản</h3>
-    <form class="space-y-6" action="#">
+    <form class="space-y-6" asp-controller="User" asp-action="Register" method="post" x-data="{
+        passwordError: '@passwordErrorClass',
+        emailError: '@emailErrorClass',
+        displayNameError: '@displayNameErrorClass',
+        password: '',
+        passwordConfirmError: ''
+    }">
         <div>
+
             <label asp-for="@Model.Email"
-                class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                class="flex mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Email
+
+            </label>
             <input asp-for="@Model.Email" type="email"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="name@company.com" required>
+                class="bg-gray-50 border  border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                x-on:focus="emailError = ''" x-bind:class="emailError ? 'border-red-500' : ''"
+                placeholder="example@@abc.com " required>
+            <p x-show="emailError" id="outlined_error_help" class="mt-2 text-xs text-red-600 dark:text-red-400"> <span
+                    asp-validation-for="@Model.Email"></span> </p>
         </div>
         <div>
             <label asp-for="@Model.DisplayName"
                 class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Tên người
                 dùng</label>
-            <input asp-for="@Model.DisplayName" type="text"
+            <input asp-for="@Model.DisplayName" type="text" x-bind:class="displayNameError ? 'border-red-500' : ''"
+                x-on:focus="displayNameError = ''"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                placeholder="name@company.com" required>
+                placeholder="Nguyễn Văn A" required>
+            <p x-show="displayNameError" id="outlined_error_help" class="mt-2 text-xs text-red-600 dark:text-red-400">
+                <span asp-validation-for="@Model.DisplayName"></span>
+            </p>
+
         </div>
         <div>
             <label asp-for="@Model.Password"
                 class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Mật khẩu</label>
             <input asp-for="@Model.Password" type="password" placeholder="••••••••"
+                x-bind:class="passwordError ? 'border-red-500' : ''" x-on:focus="passwordError = ''"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                required>
+                x-bind:value="password" x-on:input="password = $event.target.value" required>
+            <p x-show="passwordError" id="outlined_error_help" class="mt-2 text-xs text-red-600 dark:text-red-400">
+                <span asp-validation-for="@Model.Password"></span>
+            </p>
         </div>
         <div>
             <label class="block mb-2 text-base $sm:text-sm font-medium text-gray-900 dark:text-white">Nhập lại mật khẩu:
             </label>
             <input type="password" placeholder="••••••••"
+                x-on:keyup="if($event.target.value != password) passwordConfirmError = 'Mật khẩu không khớp';else passwordConfirmError = ''"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-base $sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 required>
+            <p x-show="passwordConfirmError" id="outlined_error_help"
+                class="mt-2 text-xs text-red-600 dark:text-red-400">
+                <span x-text="passwordConfirmError"></span>
+            </p>
         </div>
 
         <button type="submit"

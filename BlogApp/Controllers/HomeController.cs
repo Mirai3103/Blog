@@ -2,6 +2,7 @@
 using BlogApp.Dto;
 using BlogApp.Models;
 using BlogApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
@@ -50,6 +51,7 @@ namespace BlogApp.Controllers
             }
             return View(post);
         }
+        [Authorize(Roles = nameof(Models.User.Role.ADMIN))]
         [HttpGet("post/create")]
         public IActionResult CreatePost()
         {
@@ -106,6 +108,7 @@ namespace BlogApp.Controllers
             return View(post);
         }
         [HttpPost("post/create")]
+
         [ValidateAntiForgeryToken]
         public IActionResult CreatePost(CreatePostDto post, [FromForm(Name = "thumbnail")] IFormFile thumbnail)
         {

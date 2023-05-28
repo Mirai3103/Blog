@@ -12,7 +12,31 @@
   @RenderSection("Heads", false)
 </head>
 
+
 <body>
+  @{
+    if (TempData["Info"] != null)
+    {
+      @await Component.InvokeAsync("NotificationToast", new {
+  Message = TempData["Info"],
+  Type = BlogApp.Views.Shared.Components.NotificationToast.NotificationToastType.Success
+  })
+    }
+    if (TempData["Error"] != null)
+    {
+      @await Component.InvokeAsync("NotificationToast", new {
+  Message = TempData["Error"],
+  Type = BlogApp.Views.Shared.Components.NotificationToast.NotificationToastType.Error
+  })
+    }
+    if (TempData["Success"] != null)
+    {
+      @await Component.InvokeAsync("NotificationToast", new {
+  Message = TempData["Success"],
+  Type = BlogApp.Views.Shared.Components.NotificationToast.NotificationToastType.Success
+  })
+    }
+  }
   <div
     class="max-w-[1300px] relative $ssm:max-w-[400px] $ssm:!px-2 $md:px-2 $lg:px-14 $lg:max-w-[834px] $xl:px-16 px-28 $sm:!px-5 xl:px-10  mx-auto">
     <header class="border-b z-50 absolute pb-10 pt-2 px-4 py-2 my-2 mb-4">
@@ -25,12 +49,85 @@
             <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Blog</span>
           </a>
           <div class="flex md:order-2 gap-x-4">
-            <button type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng
-              ký</button>
-            <button type="button"
-              class="text-sm px-4 py-2 text-center mr-3 md:mr-0 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-              Đăng nhập</button>
+            @if (Context.User.Identity.IsAuthenticated)
+            {
+              @using System.Security.Claims;
+              var email = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+              var role = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+              var id = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+              <div type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"
+              class="flex hover:bg-slate-50 rounded-md px-2 cursor-pointer items-center space-x-4">
+                <script>
+                  console.log("@role");
+                </script>
+                <div
+                class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                  <span class="font-medium text-gray-600 dark:text-gray-300">
+                    @{
+                      var listChar = Context.User.Identity.Name.ToString().Split(" ").Select(s => s[0]).ToList();
+                      // get Last Two Char or First Char
+                      var name = string.Join("", listChar);
+                      if (name.Length > 2)
+                      {
+                        name = name.Substring(name.Length - 2);
+                      }
+                      <span>@name</span>
+                    }
+
+                  </span>
+                </div>
+                <div class="font-medium dark:text-white">
+                  <div>@Context.User.Identity.Name</div>
+                </div>
+              </div>
+              <div id="userDropdown"
+              class="z-10 hidden   bg-white divide-y divide-gray-100 rounded-lg shadow w-full max-w-xs dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-base text-gray-900 dark:text-white">
+                  <div class="font-bold">
+                    @Context.User.Identity.Name
+                  </div>
+                  <div class=" truncate">
+                    @email
+                  </div>
+                </div>
+                <ul class="py-2 text-base text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                  <li>
+                    <a href="#"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                  </li>
+                  <li>
+                    <a href="#"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+                  </li>
+                  @if (role == nameof(BlogApp.Models.User.Role.ADMIN) || role == nameof(BlogApp.Models.User.Role.CREATOR))
+                  {
+
+                    <li>
+                      <a asp-action="Create" asp-controller="Post"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tạo post</a>
+                    </li>
+                  }
+                </ul>
+                <div class="py-1">
+                  <a asp-action="Logout" asp-controller="User"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
+                    out</a>
+                </div>
+              </div>
+            }
+            else
+            {
+              <a asp-action="Register" asp-controller="User">
+                <button type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng
+                  ký</button></a>
+              <a asp-action="Login" asp-controller="User">
+                <button type="button"
+                class="text-sm px-4 py-2 text-center mr-3 md:mr-0 font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                  Đăng nhập</button>
+              </a>
+            }
             <button data-collapse-toggle="navbar-sticky" type="button"
               class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-sticky" aria-expanded="false">
