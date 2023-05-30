@@ -1061,9 +1061,17 @@ body {
 .content h1{
   padding-top: 1rem;
   padding-bottom: 1rem;
-  font-size: 2.25rem;
+  font-size: 3rem;
+  line-height: 1;
   font-weight: 700;
-  line-height: 2.5rem;
+  line-height: 4rem;
+}
+
+@media (max-width: 550px){
+  .content h1{
+    font-size: 2.25rem;
+    line-height: 2.75rem;
+  }
 }
 
 .content h2{
@@ -3053,6 +3061,14 @@ code {
     display: none;
   }
 
+  .\$ssm\:h-10{
+    height: 2.5rem;
+  }
+
+  .\$ssm\:w-10{
+    width: 2.5rem;
+  }
+
   .\$ssm\:max-w-\[400px\]{
     max-width: 400px;
   }
@@ -3065,13 +3081,33 @@ code {
     flex-direction: column;
   }
 
+  .\$ssm\:gap-x-0{
+    -moz-column-gap: 0px;
+         column-gap: 0px;
+  }
+
+  .\$ssm\:gap-x-1{
+    -moz-column-gap: 0.25rem;
+         column-gap: 0.25rem;
+  }
+
   .\$ssm\:\!px-2{
     padding-left: 0.5rem !important;
     padding-right: 0.5rem !important;
   }
 
+  .\$ssm\:px-2{
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
   .\$ssm\:px-6{
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  .\$ssm\:text-sm{
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 }

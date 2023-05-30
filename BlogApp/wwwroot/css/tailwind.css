@@ -48,7 +48,7 @@
         @apply text-lg leading-8 font-normal;
     }
     .content h1 {
-        @apply text-4xl leading-10 font-bold py-4;
+        @apply text-5xl leading-[4rem] font-bold py-4 $ssm:text-4xl $ssm:leading-[2.75rem];
     }
     .content h2 {
         @apply text-3xl leading-10 font-bold py-4;

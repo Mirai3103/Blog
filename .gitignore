@@ -14,7 +14,7 @@ tailwind.css
 *.userprefs
 .vscode
 node_modules
-
+*/wwwroot/uploads
 # Mono auto generated files
 mono_crash.*
 .idea
