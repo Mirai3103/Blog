@@ -24,9 +24,9 @@ namespace BlogApp.Controllers
             _uploadService = uploadService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery(Name = "page")] int page = 1)
         {
-            var posts = _postService.GetPosts();
+            var posts = _postService.GetPosts(page);
 
             return View(posts);
         }
@@ -61,6 +61,20 @@ namespace BlogApp.Controllers
 
             return View();
         }
+        [Authorize(Roles = nameof(Models.User.Role.ADMIN))]
+        [HttpPost("post/delete/{slug}")]
+        public IActionResult DeletePost(string slug)
+        {
+            var post = _postService.GetPostBySlug(slug);
+            if (post is null)
+            {
+                return NotFound();
+            }
+            TempData["Success"] = "Xóa bài viết thành công";
+            _postService.DeletePostBySlug(slug);
+            return RedirectToAction(nameof(Index));
+        }
+
         [HttpGet("post/edit/{slug}")]
         public IActionResult EditPost(string slug)
         {

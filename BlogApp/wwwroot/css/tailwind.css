@@ -48,20 +48,18 @@
         @apply text-lg leading-8 font-normal;
     }
     .content h1 {
-        @apply text-5xl leading-[4rem] font-bold py-4 $ssm:text-4xl $ssm:leading-[2.75rem];
+        @apply text-5xl leading-[4rem] font-bold py-4 $ssm:text-3xl $ssm:leading-[2.75rem];
     }
     .content h2 {
-        @apply text-3xl leading-10 font-bold py-4;
+        @apply text-3xl leading-10 font-bold py-4 $ssm:text-2xl;
     }
     .content h3 {
-        @apply text-xl leading-8 font-bold py-4;
+        @apply text-xl leading-8 font-bold py-4 $ssm:text-lg;
     }
     .content h4 {
-        @apply text-lg leading-6 font-bold py-4;
+        @apply text-lg leading-6 font-bold py-4 $ssm:text-base;
     }
-    .content h5 {
-        @apply text-base leading-6 font-bold py-4;
-    }
+
     @font-face {
         font-family: "Dank Mono";
         src: url("/fonts/Dank Mono Regular.otf") format("opentype");
@@ -77,13 +75,18 @@
     pre {
         background-color: #1f2937;
         font-family: "Dank Mono", monospace;
-        @apply text-white pb-4 pt-5 pl-4 pr-4 rounded-lg text-lg max-w-full overflow-x-auto;
+        @apply text-white  my-4 pt-5 p-2 px-4 $ssm:px-1 rounded-lg text-lg max-w-full overflow-x-auto;
     }
 
     article ul {
         @apply list-inside list-disc text-lg;
     }
-
+    .content a {
+        @apply text-blue-600 cursor-pointer underline hover:text-blue-700 hover:font-semibold;
+    }
+    a.link {
+        @apply text-blue-600 cursor-pointer underline hover:text-blue-700 hover:font-semibold;
+    }
     article ol {
         @apply list-inside list-decimal text-lg;
     }

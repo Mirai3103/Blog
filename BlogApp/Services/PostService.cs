@@ -18,8 +18,9 @@ public class PostService
     {
         return _context.Posts.FirstOrDefault(p => p.ThumbnailUrl.Contains(thumbnailUrl));
     }
-    public ICollection<Post> GetPosts(int page = 1, int limit = 16)
+    public ListPostPaginationDto GetPosts(int page = 1, int limit = 16)
     {
+        var skip = (page - 1) * limit;
         var posts = _context.Posts.Include(p => p.Tags).Include(p => p.Author)
             .OrderByDescending(p => p.CreatedAt)
             .Select(p => new Post()
@@ -32,19 +33,15 @@ public class PostService
                 Id = p.Id,
                 Summary = p.Summary,
                 ThumbnailUrl = p.ThumbnailUrl
-            }).ToList();
-        if (posts.Count < 16)
+            });
+        var totalPage = (int)Math.Ceiling((double)posts.Count() / limit);
+        var listPost = posts.Skip(skip).Take(limit).ToList();
+        return new ListPostPaginationDto()
         {
-            List<Post> result = new();
-            while (result.Count < 16)
-            {
-                result.AddRange(posts);
-            }
-
-            return result;
-        }
-
-        return posts;
+            CurrentPage = page,
+            TotalPage = totalPage,
+            Posts = listPost
+        };
     }
 
     public Post? GetPostBySlug(string slug)
@@ -104,5 +101,10 @@ public class PostService
         post.ThumbnailUrl = editPostDto.ThumbnailUrl == "" ? post.ThumbnailUrl : editPostDto.ThumbnailUrl;
         _context.SaveChanges();
         return post;
+    }
+    public void DeletePostBySlug(string slug)
+    {
+        _context.Posts.Remove(_context.Posts.FirstOrDefault(p => p.Slug == slug));
+        _context.SaveChanges();
     }
 }
