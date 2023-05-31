@@ -1,0 +1,5 @@
+﻿// See https://aka.ms/new-console-template for more information
+using Markdig;
+
+var result = Markdown.ToHtml("```csharp\r\nvar result = Markdown.ToHtml(\"This is a text with some *emphasis*\");\r\nConsole.WriteLine(result);   // prints: <p>This is a text with some <em>emphasis</em></p>\r\n```\r\n\r\nIn order to activate most of all advanced extensions (except Emoji, SoftLine as HardLine, Bootstrap, YAML Front Matter, JiraLinks and SmartyPants)\r\n\r\n```csharp\r\n// Configure the pipeline with all advanced extensions active\r\nvar pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();\r\nvar result = Markdown.ToHtml(\"This is a text with some *emphasis*\", pipeline);\r\n```\r\n\r\n[Try it online!](https://dotnetfiddle.net/GoZXyI)\r\n\r\nYou can have a look at the [MarkdownExtensions](https://github.com/lunet-io/markdig/blob/master/src/Markdig/MarkdownExtensions.cs) that describes all actionable extensions (by modifying the MarkdownPipeline)\r\n\r\n## Contributing\r\n");
+Console.WriteLine(result);

@@ -7,6 +7,8 @@
 @section Heads {
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/dracular-hightlight.css" asp-append-version="true" />
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/quilljs-markdown@latest/dist/quilljs-markdown-common-style.css" />
 }
 
 @section Scripts{
@@ -14,6 +16,8 @@
     integrity="sha512-rdhY3cbXURo13l/WU9VlaRyaIYeJ/KBakckXIvJNAQde8DgpOmE+eZf7ha4vdqVjTtwQt69bD2wH2LXob/LB7Q=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quilljs-markdown@latest/dist/quilljs-markdown.js"></script>
+
 
 <script>
     hljs.configure({
@@ -67,7 +71,10 @@
     document.addEventListener("DOMContentLoaded", (event) => {
         document.querySelectorAll("pre code").forEach((block) => { hljs.highlightBlock(block); });
     });
+    document.addEventListener("DOMContentLoaded", () => {
 
+        new QuillMarkdown(quill)
+    })
 </script>
 }
 
