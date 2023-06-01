@@ -1,0 +1,67 @@
+@model IEnumerable<BlogApp.Models.Tag>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="flex justify-between items-center my-4">
+    <h1 class="text-2xl font-semibold text-gray-900 my-4 dark:text-white">Quản lý thẻ</h1>
+
+    <a asp-action="Create" asp-controller="Tag" class="btn my-2 btn-primary font-bold text-white">Create New</a>
+</div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-lg text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xl font-bold text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+
+                <th scope="col" class="px-6 py-3">
+                    Slug
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Tên thẻ
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Số bài viết
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Hành động
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in @Model)
+            {
+                <tr>
+
+                    <td class="px-6 py-4">
+                        <a href="#" class="font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            @item.Slug
+                        </a>
+                    </td>
+                    <td class="px-6 text-gray-900 font-medium py-4">
+                        @item.Name
+                    </td>
+                    <td class="px-6 py-4">
+                        @item.Posts.Count
+                    </td>
+                    <td class="px-6 py-4">
+                        <a asp-action="Edit" asp-route-id="@item.Slug"
+                        class="font-medium btn btn-warning   btn-sm  flex items-center justify-center gap-x-1 ">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="24"
+                            height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none"
+                            stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+                                <path d="M13.5 6.5l4 4" />
+                            </svg>
+                            <span>
+                                Edit
+                            </span></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

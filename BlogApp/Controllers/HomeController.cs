@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BlogApp.Controllers
 {
@@ -30,12 +31,6 @@ namespace BlogApp.Controllers
 
             return View(posts);
         }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -44,34 +39,37 @@ namespace BlogApp.Controllers
         [HttpGet("post/{slug}")]
         public IActionResult PostDetail(string slug)
         {
-            var post = _postService.GetPostBySlug(slug);
+            var post = _postService.GetPostBySlug(slug, true);
             if (post == null)
             {
                 return NotFound();
             }
             return View(post);
         }
-        [Authorize(Roles = nameof(Models.User.Role.ADMIN))]
+        [Authorize(Roles = nameof(Models.User.Role.ADMIN) + "," + nameof(Models.User.Role.CREATOR))]
         [HttpGet("post/create")]
         public IActionResult CreatePost()
         {
 
-            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
-
-
             return View();
         }
-        [Authorize(Roles = nameof(Models.User.Role.ADMIN))]
-        [HttpPost("post/delete/{slug}")]
-        public IActionResult DeletePost(string slug)
+        [Authorize(Roles = nameof(Models.User.Role.ADMIN) + "," + nameof(Models.User.Role.CREATOR))]
+        [HttpPost("post/delete/{id}")]
+        public IActionResult DeletePost(string id)
         {
-            var post = _postService.GetPostBySlug(slug);
+
+            var post = _postService.FindById(int.Parse(id));
             if (post is null)
             {
                 return NotFound();
             }
+            var userRole = User.FindFirst(ClaimTypes.Role).Value;
+            if (userRole == nameof(Models.User.Role.CREATOR) && post.Author.Id.ToString() != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            {
+                return Unauthorized();
+            }
             TempData["Success"] = "Xóa bài viết thành công";
-            _postService.DeletePostBySlug(slug);
+            _postService.DeletePost(int.Parse(id));
             return RedirectToAction(nameof(Index));
         }
 
@@ -79,7 +77,6 @@ namespace BlogApp.Controllers
         public IActionResult EditPost(string slug)
         {
 
-            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
             var post = _postService.GetPostBySlug(slug);
             if (post is null)
             {
@@ -118,7 +115,6 @@ namespace BlogApp.Controllers
                 _postService.EditPost(post);
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
             return View(post);
         }
         [HttpPost("post/create")]
@@ -134,8 +130,8 @@ namespace BlogApp.Controllers
                 _postService.CreatePost(post);
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.AuthorId = new SelectList(_context.Users.Select(p => new { p.Id, p.DisplayName }).ToList(), "Id", "DisplayName");
             return View(post);
         }
+
     }
 }

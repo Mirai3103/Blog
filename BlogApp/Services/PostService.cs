@@ -18,6 +18,10 @@ public class PostService
     {
         return _context.Posts.FirstOrDefault(p => p.ThumbnailUrl.Contains(thumbnailUrl));
     }
+    public Post? FindById(int id)
+    {
+        return _context.Posts.Include(p => p.Author).FirstOrDefault(p => p.Id == id);
+    }
     public ListPostPaginationDto GetPosts(int page = 1, int limit = 16)
     {
         var skip = (page - 1) * limit;
@@ -43,8 +47,18 @@ public class PostService
             Posts = listPost
         };
     }
-
-    public Post? GetPostBySlug(string slug)
+    public Post DeletePost(int id)
+    {
+        var post = _context.Posts.FirstOrDefault(p => p.Id == id);
+        if (post is null)
+        {
+            throw new Exception("Post not found");
+        }
+        _context.Posts.Remove(post);
+        _context.SaveChanges();
+        return post;
+    }
+    public Post? GetPostBySlug(string slug, bool incrementView = false)
     {
         var post = _context.Posts
             .Where(p => p.Slug == slug)
@@ -62,6 +76,11 @@ public class PostService
                 ThumbnailUrl = p.ThumbnailUrl,
                 Content = p.Content,
             }).FirstOrDefault();
+        if (post is not null && incrementView)
+        {
+            post.ViewCount++;
+            _context.SaveChangesAsync();
+        }
         return post;
     }
 

@@ -40,6 +40,7 @@ public class Post
     public virtual ICollection<Comment> Comments { get; set; }
     [ForeignKey("AuthorId")]
     public virtual User Author { get; set; }
+    public uint ViewCount { get; set; } = 0;
 
     public Post()
     {

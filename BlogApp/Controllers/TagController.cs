@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BlogApp.DAL;
 using BlogApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogApp.Controllers
 {
+    [Authorize(Roles = nameof(Models.User.Role.ADMIN) + "," + nameof(Models.User.Role.CREATOR))]
     public class TagController : Controller
     {
         private readonly BlogContext _context;
@@ -18,56 +20,37 @@ namespace BlogApp.Controllers
         {
             _context = context;
         }
-
-        // GET: Tag
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> AdminIndex()
         {
-              return _context.Tags != null ? 
-                          View(await _context.Tags.ToListAsync()) :
-                          Problem("Entity set 'BlogContext.Tags'  is null.");
+            return _context.Tags != null ?
+                        View(await _context.Tags.Include(t => t.Posts).ToListAsync()) :
+                        Problem("Entity set 'BlogContext.Tags'  is null.");
         }
-
-        // GET: Tag/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null || _context.Tags == null)
-            {
-                return NotFound();
-            }
-
-            var tag = await _context.Tags
-                .FirstOrDefaultAsync(m => m.Slug == id);
-            if (tag == null)
-            {
-                return NotFound();
-            }
-
-            return View(tag);
-        }
-
-        // GET: Tag/Create
+        [HttpGet("Admin/[Controller]/[action]")]
         public IActionResult Create()
         {
             return View();
         }
-
-        // POST: Tag/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Admin/[Controller]/[action]")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Slug,Name")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Name")] Tag tag)
         {
+            tag.Slug = BlogApp.Utils.Helper.Slugify(tag.Name);
+            ModelState.Remove("Slug");
+            var isExisted = TagExists(tag.Slug);
+            if (isExisted)
+            {
+                ModelState.AddModelError("Name", "Vui lòng thử tên khác");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(tag);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminIndex));
             }
             return View(tag);
         }
-
-        // GET: Tag/Edit/5
+        [HttpGet("Admin/[Controller]/[action]/{id}")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null || _context.Tags == null)
@@ -82,11 +65,7 @@ namespace BlogApp.Controllers
             }
             return View(tag);
         }
-
-        // POST: Tag/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Admin/[Controller]/[action]/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Slug,Name")] Tag tag)
         {
@@ -113,33 +92,16 @@ namespace BlogApp.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(AdminIndex));
             }
             return View(tag);
         }
 
-        // GET: Tag/Delete/5
+
+
+        [HttpGet("Admin/[Controller]/[action]/{id}")]
+        [Authorize(Roles = nameof(Models.User.Role.ADMIN) + "," + nameof(Models.User.Role.CREATOR))]
         public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null || _context.Tags == null)
-            {
-                return NotFound();
-            }
-
-            var tag = await _context.Tags
-                .FirstOrDefaultAsync(m => m.Slug == id);
-            if (tag == null)
-            {
-                return NotFound();
-            }
-
-            return View(tag);
-        }
-
-        // POST: Tag/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (_context.Tags == null)
             {
@@ -150,14 +112,14 @@ namespace BlogApp.Controllers
             {
                 _context.Tags.Remove(tag);
             }
-            
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AdminIndex));
         }
 
         private bool TagExists(string id)
         {
-          return (_context.Tags?.Any(e => e.Slug == id)).GetValueOrDefault();
+            return (_context.Tags?.Any(e => e.Slug == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,7 +1,8 @@
 @model BlogApp.Dto.CreatePostDto;
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
 }
 
 @section Heads {
@@ -100,14 +101,16 @@
                         <input name="_redirect" type="hidden" value="#" />
                         <div class="mt-4 space-y-6">
                             <div>
-                                <label asp-for="AuthorId"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Tác giả:
-                                </label>
-                                <select asp-for="AuthorId" asp-items="ViewBag.AuthorId"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option value="">-- Select --</option>
-                                </select>
+                     
+                                @{
+                                    @using System.Security.Claims;
+                                    var id = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value
+                ?? "";
+                                }
+                                     <input  asp-for="AuthorId" value="@id" readonly
+                                    
+                                    class="hidden"
+                                placeholder="Tác giả" />
                             </div>
                             <div class="col-span-full">
                                 <label asp-for="Title" class="block mb-3 text-lg font-bold text-gray-600" name="company">

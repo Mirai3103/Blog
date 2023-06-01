@@ -20,35 +20,18 @@ builder.Services.AddTransient<UploadService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<CommentService>();
 builder.Services.AddTransient<TagService>();
-builder.Services.AddTransient<ScheduleService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/User/Login";
-        options.ExpireTimeSpan = TimeSpan.FromHours(1);
+        options.ExpireTimeSpan = TimeSpan.FromDays(14);
     });
-/*builder.Services.AddQuartz(q =>
-{
-    q.UseMicrosoftDependencyInjectionScopedJobFactory();
-    var jobKey = new JobKey("ClearUnuseImage");
-    q.AddJob<ScheduleService>(opts => opts.WithIdentity(jobKey));
 
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithIdentity("DemoJob-trigger")
-        .WithCalendarIntervalSchedule(s =>
-                   s.WithIntervalInWeeks(1)
-                    .SkipDayIfHourDoesNotExist(true)
-                                                        )
-        );
-});
-builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = false);*/
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8081";
 builder.WebHost.UseUrls($"http://*:{port}");
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

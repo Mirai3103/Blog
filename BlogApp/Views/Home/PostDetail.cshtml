@@ -1,5 +1,6 @@
 @model BlogApp.Models.Post
 @{
+
     ViewData["Title"] = Model.Title + " | BlogApp";
 }
 @section Heads
@@ -40,10 +41,18 @@
     @Html.Raw(@Model.Content)
 </article>
 @if (Context.User.Identity.IsAuthenticated)
+
 {
     @using System.Security.Claims;
+
     var role = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value ??
-    ""; if (role == BlogApp.Models.User.Role.ADMIN.ToString())
+
+                    "";
+
+    var id = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
+
+    if (role == BlogApp.Models.User.Role.ADMIN.ToString() || id == Model.Author.Id.ToString())
+
     {
         <div class="w-full flex justify-center">
             <a asp-action="EditPost" asp-route-slug="@Model.Slug"
@@ -53,7 +62,9 @@
             </a>
 
         </div>
+
     }
+
 }
 
 @section Scripts {
