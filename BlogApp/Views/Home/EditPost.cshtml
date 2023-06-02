@@ -1,4 +1,7 @@
-﻿@model BlogApp.Dto.EditPostDto;
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@model BlogApp.Dto.EditPostDto;
 @{
     ViewData["Title"] = "Edit " + Model.Title;
   Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -97,13 +100,30 @@
 
     </div>
 </div>
+@{
+    var listSelectedItem = new List<dynamic>();
+    foreach (var item in ViewBag.Tags)
+    {
+        if (Model.Tags.Any(x => x == item.Value))
+        {
+            listSelectedItem.Add(new { id = item.Value, text = item.Text });
+        }
+    }
+    var json = JsonConvert.SerializeObject(listSelectedItem);
+
+}
+<script>
+    window.selectedTags = @Html.Raw(json);
+</script>
 <div class="row">
     <div class="col-md-4">
         @Html.ValidationSummary()
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="relative flex justify-center max-h-full overflow-hidden lg:px-0 md:px-2">
             <div class="relative z-10 flex flex-col flex-1 px-4 lg:py-4 md:flex-none md:px-4 sm:justify-center">
-                <div class="mx-auto lg:w-[834px] md:px-0 md:w-[500px] sm:px-4">
+                <div x-data="{
+                                selectedTags: window.selectedTags,
+                            }" class="mx-auto lg:w-[834px] md:px-0 md:w-[500px] sm:px-4">
                     @using (Html.BeginForm("EditPost", "Home", FormMethod.Post, new
                     {
                         enctype = "multipart/form-data",
@@ -124,7 +144,7 @@
                             <div>
                             
                                  @{
-                                    @using System.Security.Claims;
+                  
                                     var id = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value
                 ?? "";
                                 }
@@ -138,9 +158,48 @@
                                     Tiêu đề bài viết:
                                 </label>
                                 <input asp-for="Title"
-                                class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
-                                placeholder="Tiêu đề bài viết" />
+                                       class="block w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+                                       placeholder="Tiêu đề bài viết" />
                             </div>
+                            <div>
+                                <label class="block mb-3 text-lg font-bold text-gray-600">Thẻ</label>
+                                <div data-dropdown-toggle="dropdown" id="dropdownDefaultButton"
+                                     class=" flex min-h-[40px] w-full px-6 py-3 text-black bg-white border border-gray-200 appearance-none rounded-xl placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm">
+                                    <template x-for="tag in selectedTags">
+                                        <span class="bg-gray-100 flex gap-x-4 items-center text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                                            <span x-text="tag.text">
+
+                                            </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 x-on:click="selectedTags = selectedTags.filter(item => item.id !== tag.id);"
+                                                 class="icon hover:bg-gray-300 cursor-pointer icon-tabler icon-tabler-x"
+                                                 width="15" height="15" viewBox="0 0 24 24" stroke-width="1.5"
+                                                 stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M18 6l-12 12" />
+                                                <path d="M6 6l12 12" />
+                                            </svg>
+                                            <input type="hidden" asp-for="Tags" x-bind:value="tag.id" />
+
+                                        </span>
+                                    </template>
+                                </div>
+                                <div id="dropdown"
+                                     class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-full dark:bg-gray-700">
+                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                        aria-labelledby="dropdownDefaultButton">
+                                        @foreach (var item in ViewBag.Tags)
+                                        {
+                                            <li x-on:click="selectedTags.push({id: '@item.Value', text: '@item.Text'})"
+                                                x-show="!selectedTags.find(x => x.id === '@item.Value')"
+                                                class="block px-4 text-base py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                @item.Text
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+
                             <div class="col-span-full">
                                 <label asp-for="Summary" class="block mb-3 text-lg font-bold text-gray-600" name="email">
                                     Giới thiệu bài viết:

@@ -95,6 +95,7 @@ public class PostService
             Title = createPostDto.Title,
             Published = true,
             Slug = Helper.Slugify(createPostDto.Title),
+            Tags = _context.Tags.Where(t => createPostDto.Tags.Contains(t.Slug)).ToList()
         };
         _context.Posts.Add(post);
         _context.SaveChanges();
@@ -103,13 +104,14 @@ public class PostService
     }
     public Post EditPost(EditPostDto editPostDto)
     {
-        var post = _context.Posts.FirstOrDefault(p => p.Id == editPostDto.Id);
+        var post = _context.Posts.Include(p => p.Tags).FirstOrDefault(p => p.Id == editPostDto.Id);
         if (post is null)
         {
             throw new Exception("Post not found");
         }
         post.Content = editPostDto.Content;
         post.Summary = editPostDto.Summary;
+        post.Tags = _context.Tags.Where(t => editPostDto.Tags.Contains(t.Slug)).ToList();
         if (post.Title != editPostDto.Title)
         {
             post.Slug = Helper.Slugify(editPostDto.Title);
