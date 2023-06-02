@@ -4,7 +4,7 @@
     
     public string RandomColorClassName()
     {
-        var className = new List<string> { "bg-blue-100 text-blue-800", "bg-gray-100 text-gray-800", "bg-red-100 text-red-800", "bg-green-100 text-green-800", "bg-yellow-100 text-yellow-800", "bg-indigo-100 text-indigo-800", "bg-purple-100 text-purple-800", "bg-pink-100 text-pink-800", "bg-emerald-100 text-emerald-800", "bg-violet-100 text-violet-800" };
+        var className = new List<string> { "bg-blue-100 text-blue-800", "bg-gray-100 text-gray-800", "bg-red-100 text-red-800", "bg-green-100 text-green-800", "bg-yellow-100 text-yellow-800", "bg-indigo-100 text-indigo-800", "bg-purple-100 text-purple-800", "bg-pink-100 text-pink-800", "bg-emerald-100 text-emerald-800", "bg-violet-100 text-violet-800", "bg-rose-100 text-rose-800" };
         var random = new Random();
         var index = random.Next(className.Count);
         return className[index];
@@ -15,11 +15,11 @@
     var color = RandomColorClassName();
     if (Model.Url is not null && Model.Url.Length > 0)
     {
-        <a href="@Model.Url" class="@color min-w-[40px] cursor-pointer hover\:underline text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">@Model.Text</a>
+        <a href="@Model.Url" class="@color min-w-[40px] cursor-pointer  text-sm font-bold hover:underline mr-1 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">@Model.Text</a>
     }
     else
     {
-        <span class="@color min-w-[40px] text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">@Model.Text</span>
+        <span class="@color min-w-[40px] text-xs font-medium mr-1 px-2.5 py-0.5 rounded-full dark:bg-pink-900 dark:text-pink-300">@Model.Text</span>
     }
 
 }

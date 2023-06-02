@@ -1,5 +1,10 @@
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using BlogApp.Views.Shared.Components.Badge
 @model BlogApp.Models.Post
 @{
+
+
 
     ViewData["Title"] = Model.Title + " | BlogApp";
 }
@@ -40,21 +45,49 @@
 
     @Html.Raw(@Model.Content)
 </article>
-@if (Context.User.Identity.IsAuthenticated)
 
-{
-    @using System.Security.Claims;
+<div class="flex mx-auto max-w-[850px] mt-14 px-2 gap-x-2">
+    <h2 class="font-bold">Thẻ: </h2>
+    @foreach (var tag in @Model.Tags)
 
-    var role = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value ??
 
-                    "";
-
-    var id = Context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value ?? "";
-
-    if (role == BlogApp.Models.User.Role.ADMIN.ToString() || id == Model.Author.Id.ToString())
 
     {
-        <div class="w-full flex justify-center">
+        @await Component.InvokeAsync("Badge", new BadgeProps(){
+    Text = tag.Name,
+    Url = $"/Tag/{tag.Slug}"
+    })
+
+
+
+    }
+</div>
+@if (Context.User.Identity.IsAuthenticated)
+
+
+
+{
+
+
+
+    var role = Context.User.Claims.FirstOrDefault(x => x.Type ==
+
+
+
+    ClaimTypes.Role)?.Value ?? ""; var id = Context.User.Claims.FirstOrDefault(x => x.Type ==
+
+
+
+    ClaimTypes.NameIdentifier)?.Value ?? ""; if (role == BlogApp.Models.User.Role.ADMIN.ToString() || id ==
+
+
+
+    Model.Author.Id.ToString())
+
+
+
+    {
+        <div class="w-full flex justify-center mt-20">
             <a asp-action="EditPost" asp-route-slug="@Model.Slug"
         class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Sửa bài viết
@@ -63,7 +96,11 @@
 
         </div>
 
+
+
     }
+
+
 
 }
 

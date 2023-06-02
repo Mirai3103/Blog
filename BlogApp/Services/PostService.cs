@@ -128,4 +128,30 @@ public class PostService
         _context.Posts.Remove(_context.Posts.FirstOrDefault(p => p.Slug == slug));
         _context.SaveChanges();
     }
+    public ListPostPaginationDto FindPostsByKeyword(string keyword, int page = 1, int limit = 16)
+    {
+        var skip = (page - 1) * limit;
+        var posts = _context.Posts.Include(p => p.Tags).Include(p => p.Author)
+            .Where(p => p.Title.Contains(keyword) || p.Summary.Contains(keyword))
+            .OrderByDescending(p => p.CreatedAt)
+            .Select(p => new Post()
+            {
+                Author = new User() { DisplayName = p.Author.DisplayName },
+                Tags = p.Tags,
+                Title = p.Title,
+                Slug = p.Slug,
+                CreatedAt = p.CreatedAt,
+                Id = p.Id,
+                Summary = p.Summary,
+                ThumbnailUrl = p.ThumbnailUrl
+            });
+        var totalPage = (int)Math.Ceiling((double)posts.Count() / limit);
+        var listPost = posts.Skip(skip).Take(limit).ToList();
+        return new ListPostPaginationDto()
+        {
+            CurrentPage = page,
+            TotalPage = totalPage,
+            Posts = listPost
+        };
+    }
 }
