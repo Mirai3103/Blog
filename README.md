@@ -1,0 +1,2 @@
+# Blog
+My project is a personal blog website developed using C# programming language and MySQL database. The goal is to enable writing and publishing blog posts. The project utilizes ASP.NET 6 Core MVC and Entity Framework, and includes key features such as CRUD operations for posts and tags, login and registration functionality. In the future, I plan to develop a commenting feature to enhance interaction with readers. This project allows me to share my knowledge and experiences through blog posts on my personal website.
