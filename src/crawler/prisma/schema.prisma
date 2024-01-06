@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ArticleTags {
+  ArticlesId Int
+  TagsId     Int
+  Articles   Articles @relation(fields: [ArticlesId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_ArticleTags_Articles_ArticlesId")
+  Tags       Tags     @relation(fields: [TagsId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_ArticleTags_Tags_TagsId")
+
+  @@id([ArticlesId, TagsId], map: "PK_ArticleTags")
+  @@index([TagsId], map: "IX_ArticleTags_TagsId")
+}
+
+model Articles {
+  Id               Int           @id(map: "PK_Articles") @default(autoincrement())
+  Title            String        @unique(map: "IX_Articles_Title") @db.VarChar(200)
+  Slug             String        @unique(map: "IX_Articles_Slug") @db.VarChar(200)
+  ShortDescription String?       @db.VarChar(500)
+  DisplayImage     String        @db.VarChar(200)
+  Content          String
+  MetaDescription  String?
+  Created          DateTime      @db.Timestamptz(6)
+  CreatedBy        String?
+  LastModified     DateTime      @db.Timestamptz(6)
+  LastModifiedBy   String?
+  ArticleTags      ArticleTags[]
+}
+
+model Tags {
+  Id          Int           @id(map: "PK_Tags") @default(autoincrement())
+  Name        String        @unique(map: "IX_Tags_Name") @db.VarChar(20)
+  Slug        String        @unique(map: "IX_Tags_Slug") @db.VarChar(20)
+  Description String?       @db.VarChar(200)
+  ArticleTags ArticleTags[]
+}
+
+model EFMigrationsHistory {
+  MigrationId    String @id(map: "PK___EFMigrationsHistory") @db.VarChar(150)
+  ProductVersion String @db.VarChar(32)
+
+  @@map("__EFMigrationsHistory")
+}

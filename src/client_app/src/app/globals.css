@@ -1,0 +1,49 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    
+    font-family:"Dank Mono";
+    font-weight: 400;
+    font-style: normal;
+    src: url("/Dank\ Mono\ Regular.otf") format("opentype");
+}
+@font-face {
+    font-family:"Dank Mono";
+    font-weight: 400;
+    font-style: italic;
+    src: url("/Dank\ Mono\ Italic.otf") format("opentype");
+}
+
+pre {
+    font-family: "Dank Mono", monospace !important;
+    font-size: 100% !important;
+}
+.ck.ck-content{
+    border: none !important;
+    box-shadow: none !important;
+}
+.ck.ck-toolbar__items{
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+.ck-source-editing-area textarea{
+    background-color: white !important;
+}
+
+article  img{
+    display: block;
+    margin: 0 auto;
+}
+
+.ck-editor{
+    width: 100% !important;
+}
+@layer components {
+   
+   p > code{
+        @apply bg-primary-100 text-primary-900  p-1 rounded-lg;
+        font-family: "Dank Mono", monospace !important;
+    }
+}

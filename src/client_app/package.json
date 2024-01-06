@@ -1,0 +1,52 @@
+{
+  "name": "client_app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "generate:types": "nswag run ./config.nswag version /runtime:Net60"
+  },
+  "dependencies": {
+    "@auth0/nextjs-auth0": "^3.5.0",
+    "@ckeditor/ckeditor5-build-balloon-block": "^40.2.0",
+    "@ckeditor/ckeditor5-react": "^6.2.0",
+    "@heroicons/react": "^2.1.1",
+    "@next/font": "^14.0.4",
+    "@nextui-org/react": "^2.2.9",
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/qs": "^6.9.11",
+    "axios": "^1.6.2",
+    "ckeditor5-custom-build": "file:CkEditorBuild",
+    "framer-motion": "^10.16.16",
+    "highlight.js": "^11.9.0",
+    "http-proxy-middleware": "^2.0.6",
+    "markdown-it": "^14.0.0",
+    "next": "14.0.4",
+    "next-http-proxy-middleware": "^1.2.6",
+    "next-themes": "^0.2.1",
+    "nextjs-toploader": "^1.6.4",
+    "qs": "^6.11.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.49.2",
+    "showdown": "^2.1.0",
+    "slugify": "^1.6.6",
+    "usehooks-ts": "^2.9.1"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "@types/markdown-it": "^13.0.7",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
