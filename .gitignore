@@ -3,7 +3,7 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
-# User-specific files
+# User-specific filesW
 *.rsuser
 *.suo
 *.user
