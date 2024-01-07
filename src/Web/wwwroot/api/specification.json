@@ -107,8 +107,16 @@
           "x-position": 1
         },
         "responses": {
-          "200": {
-            "description": ""
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -689,7 +697,7 @@
           },
           "shortDescription": {
             "type": "string",
-            "maxLength": 200,
+            "maxLength": 500,
             "minLength": 0,
             "nullable": true
           },

@@ -6,12 +6,9 @@ import {
   Button,
   NavbarItem,
   Link,
-  User,
   Avatar,
-  Divider,
   DropdownSection,
 } from "@nextui-org/react";
-import NextLink from "next/link";
 import {
   Dropdown,
   DropdownTrigger,
@@ -22,17 +19,13 @@ import {
 export default function AuthButton() {
   const { user, error, isLoading } = useUser();
   const router = useRouter();
-  if (isLoading || error)
+  if (isLoading || error|| !user)
     return (
       <>
         <NavbarItem className=" hidden md:flex">
-          <Link href="/api/auth/login">Login</Link>
+          <Button as={Link} color="primary" href="/api/auth/login">Đăng nhập</Button>
         </NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+       
       </>
     );
 
@@ -58,17 +51,17 @@ export default function AuthButton() {
         </DropdownSection>
         <DropdownSection aria-label="Actions" showDivider>
         <DropdownItem onClick={() => router.push("/articles/create")}>
-          Create new article
+         Tạo bài viết
         </DropdownItem>
         <DropdownItem onClick={() => router.push("/profile")}>
-          Profile
+          Trang cá nhân
         </DropdownItem>
         <DropdownItem onClick={() => router.push("/dashboard")}>
-          Dashboard
+          Quản lý bài viết
         </DropdownItem>
         </DropdownSection>
         <DropdownItem onClick={() => router.push("/api/auth/logout")}>
-          Log Out
+          Đăng xuất
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

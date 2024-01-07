@@ -25,7 +25,6 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
     {
         _context = context;
         RuleFor(v => v.Title)
-            .MaximumLength(20).WithMessage("test ne")
             .NotNull().WithMessage("Tên không được để trống.")
             .NotEmpty().WithMessage("Tên không được để trống.")
             .MustAsync(BeUniqueName).WithMessage("Tên đã tồn tại.")
@@ -39,7 +38,7 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
             .WithName("Slug");
 
         RuleFor(v => v.ShortDescription)
-            .MaximumLength(200).WithMessage("Mô tả ngắn không được vượt quá 200 ký tự.");
+            .MaximumLength(500).WithMessage("Mô tả ngắn không được vượt quá 500 ký tự.");
 
         RuleFor(v => v.DisplayImage)
             .NotNull().WithMessage("Ảnh không được để trống.")

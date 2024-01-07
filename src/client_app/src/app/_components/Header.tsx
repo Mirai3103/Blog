@@ -7,37 +7,35 @@ import {
   NavbarContent,
   NavbarItem,
   Link,
-  Button,
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
   Input,
-  useDisclosure,
 } from "@nextui-org/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import DarkModeToggleButton from "@/components/DarkModeToggleButton";
 import AuthButton from "./AuthButton";
-
-
+import { usePathname } from "next/navigation";
+import NextLink from "next/link";
+const menuItems = [
+  {
+    display: "Portfolio",
+    path: "/",
+  },
+  {
+    display: "Blogs",
+    path: "/articles",
+  },
+  {
+    display: "Liên hệ",
+    path: "/contact",
+  },
+];
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const pathname = usePathname();
 
 
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
-  React.useEffect(() => {
-   
-  }, []);
   return (
     <Navbar
       maxWidth="2xl"
@@ -56,21 +54,19 @@ export default function Header() {
         </NavbarBrand>
         <NavbarItem className="ml-4">
           <NavbarContent className="hidden md:flex gap-4">
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Features
-              </Link>
-            </NavbarItem>
-            <NavbarItem isActive>
-              <Link href="#" aria-current="page">
-                Customers
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Integrations
-              </Link>
-            </NavbarItem>
+            {menuItems.map((item, index) => (
+              <NavbarItem key={`${item}-${index}`} isActive={pathname === item.path}>
+                <Link
+                href={item.path}
+                color="foreground"
+                as={NextLink}
+                {...(pathname === item.path) && { "aria-current": "page" }}
+                >
+                  {item.display}
+                </Link>
+              </NavbarItem>
+            ))}
+           
           </NavbarContent>
         </NavbarItem>
       </NavbarContent>
@@ -92,27 +88,20 @@ export default function Header() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="flex">
-      
-      <DarkModeToggleButton />
+          <DarkModeToggleButton />
         </NavbarItem>
         <AuthButton />
       </NavbarContent>
       <NavbarMenu>
         {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
+          <NavbarMenuItem key={`${item}-${index}`} isActive={pathname === item.path}>
             <Link
-              color={
-                index === 2
-                  ? "primary"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
               className="w-full"
-              href="#"
+              as={NextLink}
+              href={item.path}
               size="lg"
             >
-              {item}
+              {item.display}
             </Link>
           </NavbarMenuItem>
         ))}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Client } from './api_client';
 interface ClientOptions {
-    getAccessToken?: () => Promise<string>;
+    getAccessToken?: () => Promise<string|undefined>|string|undefined;
     baseURL?: string;
 }
 

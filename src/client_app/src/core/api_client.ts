@@ -132,7 +132,7 @@ export class Client {
         return Promise.resolve<PaginatedListOfArticleBriefDto>(null as any);
     }
 
-    createArticle(command: CreateArticleCommand, cancelToken?: CancelToken | undefined): Promise<void> {
+    createArticle(command: CreateArticleCommand, cancelToken?: CancelToken | undefined): Promise<number> {
         let url_ = this.baseUrl + "/api/Articles";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -144,6 +144,7 @@ export class Client {
             url: url_,
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             },
             cancelToken
         };
@@ -159,7 +160,7 @@ export class Client {
         });
     }
 
-    protected processCreateArticle(response: AxiosResponse): Promise<void> {
+    protected processCreateArticle(response: AxiosResponse): Promise<number> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -169,15 +170,19 @@ export class Client {
                 }
             }
         }
-        if (status === 200) {
+        if (status === 201) {
             const _responseText = response.data;
-            return Promise.resolve<void>(null as any);
+            let result201: any = null;
+            let resultData201  = _responseText;
+                result201 = resultData201 !== undefined ? resultData201 : <any>null;
+    
+            return Promise.resolve<number>(result201);
 
         } else if (status !== 200 && status !== 204) {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<number>(null as any);
     }
 
     getArticleByUniqueIdentifier(identifier: string, cancelToken?: CancelToken | undefined): Promise<ArticleDto> {

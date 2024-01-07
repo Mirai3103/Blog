@@ -19,8 +19,8 @@ const shortDescriptionValidate: RegisterOptions<CreateArticleCommand, "shortDesc
     message: "Mô tả ngắn phải có ít nhất 10 ký tự",
   },
   maxLength: {
-    value: 100,
-    message: "Mô tả ngắn phải có nhiều nhất 100 ký tự",
+    value: 500,
+    message: "Mô tả ngắn có nhiều nhất 500 ký tự",
   },
 };
 const displayImageValidate: RegisterOptions<CreateArticleCommand, "displayImage"> = {
@@ -43,8 +43,8 @@ const slugValidate: RegisterOptions<CreateArticleCommand, "slug"> = {
     message: "Đường dẫn phải có ít nhất 10 ký tự",
   },
   maxLength: {
-    value: 100,
-    message: "Đường dẫn phải có nhiều nhất 100 ký tự",
+    value: 200,
+    message: "Đường dẫn  có nhiều nhất 200 ký tự",
   },
 };
 

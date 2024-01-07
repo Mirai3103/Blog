@@ -16,7 +16,7 @@ public class Users : EndpointGroupBase
         app
             .MapGet(GetProfile, "whoami");
     }
-        [Authorize("CanCreateArticle")]
+    [Authorize]
     public async Task<  IResult> GetProfile(HttpContext context,UserService userService)
     {
         var user = context.User;

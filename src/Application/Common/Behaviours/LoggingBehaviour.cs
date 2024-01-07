@@ -20,8 +20,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
         var requestName = typeof(TRequest).Name;
         var userId = _user.Id ?? string.Empty;
         string? userName = string.Empty;
-
-
+        Console.WriteLine($"A request for {requestName} was made by {userId}.");
         _logger.LogInformation("Blog Request: {Name} {@UserId} {@UserName} {@Request}",
             requestName, userId, userName, request);
             return Task.CompletedTask;

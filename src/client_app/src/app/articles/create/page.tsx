@@ -19,9 +19,13 @@ import { createClient } from "@/core/client";
 import { ApiException } from "@/core/api_client";
 import axios from "axios";
 import { parseValidateError } from "@/utils";
+import { getCookie } from "@/utils/cookies.util";
+import { useRouter } from "next/navigation";
 type InputData = CreateArticleCommand & { file: FileList | null };
+
 export default function CreateNewArticle() {
   const isClient = useIsClient();
+  const router = useRouter();
   const {
     watch,
     register,
@@ -65,15 +69,21 @@ export default function CreateNewArticle() {
     );
   };
   const onSubmit: SubmitHandler<InputData> = async (data) => {
-    console.log(data);
-    const client = createClient({});
+    const client = createClient({
+      getAccessToken: () => getCookie("accessToken"),
+    });
     const form = new FormData();
     form.append("file", data.file![0]);
     console.log({
       file: data.file,
       form,
     })
-    const res = await axios.post("/asp/api/files/", form);
+    const accessToken = getCookie("accessToken");
+    const res = await axios.post("/asp/api/files/", form,{
+      headers:{
+        "Authorization":`Bearer ${accessToken}`
+      }
+    });
     try{
       const result = await client.createArticle({
         ...data,
@@ -81,6 +91,7 @@ export default function CreateNewArticle() {
         file: undefined,
         tagIds:[...data.tagIds!] 
       }as any);
+      router.push(`/articles/${data.slug}`);
     }
     catch(err){
       if(err instanceof ApiException){
@@ -94,6 +105,7 @@ export default function CreateNewArticle() {
         }
       }
     }
+
   };
   const title = watch("title");
   const handlePasteFormMarkdownClick = async () => {

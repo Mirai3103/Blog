@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NSwag.Annotations;
 
 namespace Blog.Web.Endpoints;
 
@@ -72,6 +73,7 @@ public class Articles : EndpointGroupBase
         return await sender.Send(new GetAllArticlesByTagIdQuery(tagId), cancellationToken);
     }
     [Authorize("CanCreateArticle")]
+    [SwaggerResponse(201, typeof(int))]
     public async Task<IResult> CreateArticle(ISender sender, [FromBody] CreateArticleCommand command,
         CancellationToken cancellationToken)
     {
